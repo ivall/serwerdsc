@@ -27,7 +27,7 @@ async def pomoc(ctx):
 
     embed.add_field(name='s!ustaw link <nazwa>', value='Ustawia nazwę linku', inline=False)
     embed.add_field(name='s!ustaw opis "<opis>"', value='Ustawia opis', inline=False)
-    embed.add_field(name='s!ustaw css <plik_css>', value='Ustawia link do pliku css', inline=False)
+    embed.add_field(name='s!ustaw css <plik_css>', value='Ustawia link do pliku css. Zalecane skorzystanie z hosting.zxu.pl', inline=False)
 
     embed.add_field(name='Linki', value='[serwer support](https://discord.gg/McGwsEsjBU)')
 

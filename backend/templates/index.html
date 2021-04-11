@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container mt-5">
+        <div class="card card-body">
+            <h4>Co to jest?</h4>
+            <p>serwerdsc umożliwia stworzenie strony dla serwera discord oraz ładnie wyglądającego zaproszenia na serwer</p>
+        </div>
+        <div class="card card-body mt-5">
+            <h4>Główne zalety</h4>
+            <ul>
+                <li>Ładnie wyglądajacy link zaproszenia na serwer</li>
+                <li>Pełna kastomizacja wyglądu strony (własny css)</li>
+                <li>Własna strona serwera</li>
+                <li>Możliwośc podpięcia google analitycs do śledzenia ruchu na stronie</li>
+                <li>Bardzo szybki support</li>
+            </ul>
+        </div>
+        <div class="card card-body mt-5 flex-row">
+            <a href="https://discord.com/api/oauth2/authorize?client_id=830498468270178343&permissions=68609&scope=bot" target="_blank" class="btn btn-success home-links">Dodaj bota</a>
+            <a href="https://discord.gg/McGwsEsjBU" target="_blank" class="btn btn-secondary home-links">Serwer support</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container mt-5">
+        <div class="card text-center">
+            <div class="card-body">
+                <img src="{{ server.discord_avatar }}" style="border-radius: 50%;" alt=""/>
+                <h5 class="mt-2">{{ server.discord_name }}</h5>
+
+                <p class="mt-4">{{ server.description }}</p>
+
+                <a href="{{ server.discord_invite }}" class="btn btn-primary">dołącz</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

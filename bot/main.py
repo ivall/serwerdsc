@@ -1,3 +1,4 @@
+import discord
 import requests
 import re
 
@@ -8,11 +9,22 @@ from discord.ext.commands.errors import MissingPermissions
 from config import *
 
 bot = commands.Bot(command_prefix='s!')
+bot.remove_command('help')
+
 options = {
     'link': 'name',
     'opis': 'description',
     'css': 'css_file'
 }
+
+@bot.event
+async def on_ready():
+    print('Bot odpalony')
+    print(bot.user.name)
+    print(bot.user.id)
+    print('------')
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game("s!pomoc"))
+
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -27,9 +39,12 @@ async def pomoc(ctx):
 
     embed.add_field(name='s!ustaw link <nazwa>', value='Ustawia nazwę linku', inline=False)
     embed.add_field(name='s!ustaw opis "<opis>"', value='Ustawia opis', inline=False)
-    embed.add_field(name='s!ustaw css <plik_css>', value='Ustawia link do pliku css. Zalecane skorzystanie z hosting.zxu.pl', inline=False)
+    embed.add_field(name='s!ustaw css <plik_css>', value='Ustawia link do pliku css. Zalecane skorzystanie z [hosting.zxu.pl](https://hosting.zxu.pl)', inline=False)
+    embed.add_field(name='s!link', value='Link do strony serwera', inline=False)
 
     embed.add_field(name='Linki', value='[serwer support](https://discord.gg/McGwsEsjBU)')
+
+    embed.set_footer(text=f'Aktywny na {len(bot.guilds)} serwerach.')
 
     await ctx.send(embed=embed)
 
@@ -46,7 +61,6 @@ async def ustaw(ctx, option=None, value=None):
         if not pattern.fullmatch(value):
             await ctx.send('Możesz używać tylko liter i cyfr.')
             return
-
 
     field_name = options[option]
     invite_link = await ctx.channel.create_invite(unique=False)
@@ -71,7 +85,23 @@ async def ustaw(ctx, option=None, value=None):
         await ctx.send('Serwer z taką nazwą już istnieje.')
         return
 
+    elif r.status_code == 500:
+        await ctx.send('Nazwa serwera nie może zawierać emotikon.')
+        return
+
     await ctx.send('Niestety wykonanie komendy nie przebiegło poprawnie :worried:.')
+
+
+@bot.command()
+async def link(ctx):
+    headers = {"Authorization": f"Bearer {api_token}"}
+
+    r = requests.get(base_url+str(ctx.guild.id), headers=headers).json()
+
+    try:
+        await ctx.send('https://serwerdsc.pl/'+r['name'])
+    except KeyError:
+        await ctx.send('Serwer jeszcze nie został dodany do serwerdsc.pl, użyj komendy **s!ustaw link <nazwa>** aby go dodać.')
 
 
 bot.run(token)

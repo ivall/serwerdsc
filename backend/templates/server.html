@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block body %}
-    <link rel="stylesheet" href="{{ server.css_file }}">
+    {% if server.css_file and server.css_file != 'https://reset.pl' %}
+        <link rel="stylesheet" href="{{ server.css_file }}">
+    {% endif %}
     <div class="container mt-5">
         <div class="card text-center">
             <div class="card-body">

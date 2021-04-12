@@ -1,28 +1,19 @@
 import discord
 import requests
-import re
 
 from discord.ext import commands
 from discord.embeds import Embed
 from discord.ext.commands.errors import MissingPermissions
 
 from config import *
+from utils import options, is_alphanumeric
 
 bot = commands.Bot(command_prefix='s!')
 bot.remove_command('help')
 
-options = {
-    'link': 'name',
-    'opis': 'description',
-    'css': 'css_file'
-}
 
 @bot.event
 async def on_ready():
-    print('Bot odpalony')
-    print(bot.user.name)
-    print(bot.user.id)
-    print('------')
     await bot.change_presence(status=discord.Status.online, activity=discord.Game("s!pomoc"))
 
 
@@ -32,6 +23,7 @@ async def on_command_error(ctx, error):
         await ctx.send("Brak permisji.")
     else:
         raise error
+
 
 @bot.command()
 async def pomoc(ctx):
@@ -52,14 +44,13 @@ async def pomoc(ctx):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def ustaw(ctx, option=None, value=None):
-    if not option or option not in options.keys() or not value:
+    if option not in options.keys() or not value:
         await ctx.send('Niepoprawne użycie komendy.')
         return
 
     if option == 'name':
-        pattern = re.compile("[A-Za-z0-9]+")
-        if not pattern.fullmatch(value):
-            await ctx.send('Możesz używać tylko liter i cyfr.')
+        if not is_alphanumeric(value):
+            await ctx.send('Możesz używać tylko liter bez polskich znaków i cyfr.')
             return
 
     field_name = options[option]
@@ -80,11 +71,11 @@ async def ustaw(ctx, option=None, value=None):
         await ctx.send('Wszystko przebiegło poprawnie, dane zostały utworzone lub zaaktualizowane.')
         return
 
-    #  server with that name already exists
     elif r.status_code == 409:
         await ctx.send('Serwer z taką nazwą już istnieje.')
         return
 
+    #  I need to validate it on backend, but I am too lazy for now to do that
     elif r.status_code == 500:
         await ctx.send('Nazwa serwera nie może zawierać emotikon.')
         return

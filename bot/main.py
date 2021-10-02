@@ -6,7 +6,7 @@ from discord.embeds import Embed
 from discord.ext.commands.errors import MissingPermissions
 
 from config import *
-from utils import options, is_alphanumeric
+from utils import options, is_alphanumeric, send_update_request, headers
 
 bot = commands.Bot(command_prefix='s!')
 bot.remove_command('help')
@@ -25,13 +25,28 @@ async def on_command_error(ctx, error):
         raise error
 
 
+@bot.event
+async def on_guild_update(before, after):
+    payload = {
+        'discord_id': after.id,
+        'discord_avatar': str(after.icon_url)[:-10]
+    }
+
+    send_update_request(payload)
+
+
+@bot.event
+async def on_guild_remove(guild):
+    requests.delete(base_url + str(guild.id), headers=headers)
+
+
 @bot.command()
 async def pomoc(ctx):
     embed = Embed(title="Pomoc bota serwerdsc.pl", color=0xC100FF)
 
     embed.add_field(name='s!ustaw link <nazwa>', value='Ustawia nazwę linku', inline=False)
     embed.add_field(name='s!ustaw opis "<opis>"', value='Ustawia opis', inline=False)
-    embed.add_field(name='s!ustaw css <plik_css>', value='Ustawia link do pliku css. Zalecane skorzystanie z [hosting.zxu.pl](https://hosting.zxu.pl)', inline=False)
+    embed.add_field(name='s!ustaw css <plik_css>', value='Ustawia link do pliku css.', inline=False)
     embed.add_field(name='s!link', value='Link do strony serwera', inline=False)
 
     embed.add_field(name='Linki', value='[serwer support](https://discord.gg/McGwsEsjBU)')
@@ -63,9 +78,8 @@ async def ustaw(ctx, option=None, value=None):
         'discord_avatar': str(ctx.guild.icon_url)[:-10],
         'discord_invite': str(invite_link)
     }
-    headers = {"Authorization": f"Bearer {api_token}"}
 
-    r = requests.post(base_url, data=payload, headers=headers)
+    r = send_update_request(payload)
 
     if str(r.status_code)[0] == '2':
         await ctx.send('Wszystko przebiegło poprawnie, dane zostały utworzone lub zaaktualizowane.')

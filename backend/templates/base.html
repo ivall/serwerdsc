@@ -5,11 +5,11 @@
     <title>serwerdsc.pl</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content=" serwerdsc.pl umożliwia zrobienie ładnie wyglądającego linku zaproszenia nze specjalną stroną serwera/">
-    <meta name="keywords" content="discord, serwer discord, krótki link discord, lista serwerów discord, jak zrobić serwer discord, ivall">
-    <meta property="og:site_name" content="serwerdsc.pl">
-    <meta property="og:type" content="website">
+    <meta name="description" content="serwerdsc.pl umożliwia zrobienie ładnie wyglądającego linku zaproszenia nze specjalną stroną serwera">
+    <meta name="keywords" content="discord, serwer discord, krótki link discord, lista serwerów discord, ivall">
+    <meta property="og:site_name" content="{% if server.discord_name %}{{ server.discord_name }}{% else %}serwerdsc.pl{% endif %}">
     <meta property="og:title" content="serwerdsc.pl - strona dla twojego serwera Discord">
+    <meta property="og:type" content="website">
     <meta property="og:description" content="serwerdsc.pl umożliwia zrobienie ładnie wyglądającego linku zaproszenia ze specjalną stroną serwera">
     <meta name="theme-color" content="#006FFF">
 

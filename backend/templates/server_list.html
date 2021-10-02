@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container">
+        <h1 class="text-center mt-4">Lista serwerów discord</h1>
+        <div class="servers-container d-flex justify-content-center flex-wrap">
+            {% for server in object_list %}
+                <div class="server-container card m-4">
+                    <div class="server p-3">
+                        <div class="server-header card-header d-flex align-items-center">
+                             <div class="flex-shrink-0">
+                                <img src="{{ server.discord_avatar }}" class="rounded-circle" width="50" height="50">
+                              </div>
+                              <div class="flex-grow-1 ms-3">
+                                <h5>{{ server.name }}</h5>
+                              </div>
+                        </div>
+                        <div class="card-body">
+                            {{ server.description|truncatechars:25 }}
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ server.discord_invite }}" class="btn btn-success">Dołącz</a>
+                            <a href="/{{ server.name }}" class="btn btn-primary">Opis</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+<nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Poprzednia</a>
+          </li>
+        {% else %}
+            <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Poprzednia</a>
+          </li>
+        {% endif %}
+
+        {% if page_obj.number|add:'-4' > 1 %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'-5' }}">&hellip;</a></li>
+        {% endif %}
+
+        {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+                <li class="page-item active" aria-current="page">
+              <span class="page-link">
+                {{ i }}
+                <span class="sr-only">(current)</span>
+              </span>
+            </li>
+            {% elif i > page_obj.number|add:'-5' and i < page_obj.number|add:'5' %}
+                 <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
+           <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'5' }}">&hellip;</a></li>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Następna</a>
+          </li>
+        {% else %}
+            <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Następna</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+{% endblock %}

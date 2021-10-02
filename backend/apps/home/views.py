@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView, View, ListView
 
 from apps.api.models import Server
 
@@ -18,6 +18,13 @@ class ServerView(View):
         }
 
         return render(request, 'server.html', context=context)
+
+
+class ServerListView(ListView):
+
+    model = Server
+    paginate_by = 9
+    template_name = 'server_list.html'
 
 
 def handler404(request, exception):

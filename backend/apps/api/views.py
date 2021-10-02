@@ -11,9 +11,4 @@ class ServerViewSet(ModelViewSet):
     permission_classes = [AccessPermission]
     serializer_class = ServerSerializer
     queryset = Server.objects.all()
-
-    def retrieve(self, request, *args, **kwargs):
-        discord_id = kwargs['pk']  # id of discord server
-        server = get_object_or_404(Server, discord_id=discord_id)
-        serializer = self.serializer_class(server)
-        return Response(serializer.data)
+    lookup_field = 'discord_id'
